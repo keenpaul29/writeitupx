@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-<<<<<<< HEAD
+
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App';
@@ -25,7 +25,6 @@ if (process.env.NODE_ENV === 'production') {
   console.log('API URL:', import.meta.env.VITE_API_URL);
   console.log('Base URL:', window.location.origin);
 }
-=======
 import './index.css';
 import App from './App';
 
@@ -34,4 +33,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
   </React.StrictMode>
 );
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
+

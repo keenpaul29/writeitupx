@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
   "name": "writeitupx-client",
-=======
-  "name": "writeupx-client",
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -32,11 +28,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
-    "@vitejs/plugin-react": "^4.3.4",
-=======
     "@vitejs/plugin-react": "^4.0.0",
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
     "autoprefixer": "^10.4.20",
     "eslint": "^8.38.0",
     "eslint-plugin-react": "^7.32.2",
