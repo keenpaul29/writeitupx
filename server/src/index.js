@@ -1,5 +1,5 @@
 // Import global polyfills and configurations
-import "./utils/global.js";
+require("./utils/global.js");
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");

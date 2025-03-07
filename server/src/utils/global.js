@@ -12,5 +12,5 @@ global.prompt = (msg) => {
 // Add any other global configurations needed for the server
 global.isServer = true;
 
-// Export for ESM compatibility
-export default {}; 
+// Use CommonJS exports
+module.exports = {}; 
