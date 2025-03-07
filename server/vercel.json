@@ -2,41 +2,18 @@
   "version": 2,
   "builds": [
     {
-<<<<<<< HEAD
-      "src": "src/index.js",
-      "use": "@vercel/node"
-=======
       "src": "./src/index.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "src/**"
+          "./src/**"
         ]
       }
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-<<<<<<< HEAD
-      "dest": "src/index.js"
-    },
-    {
-      "src": "/auth/(.*)",
-      "dest": "src/index.js"
-    },
-    {
-      "src": "/socket.io/(.*)",
-      "dest": "src/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "src/index.js"
-    }
-  ]
-}
-=======
       "dest": "./src/index.js"
     },
     {
@@ -56,4 +33,3 @@
     "NODE_ENV": "production"
   }
 }
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
