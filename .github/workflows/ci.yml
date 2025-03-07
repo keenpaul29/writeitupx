@@ -19,26 +19,22 @@ jobs:
       with:
         node-version: 18
 
-    # Deploy server first
-    - name: Deploy Server to Vercel
+    - name: Deploy Server
       working-directory: ./server
       run: |
-        echo "Installing Vercel CLI..."
         npm i -g vercel
-        echo "Deploying server..."
-        vercel deploy . --prod --yes --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
+        vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
+        vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
       env:
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SERVER_PROJECT_ID }}
 
-    # Then deploy client
-    - name: Deploy Client to Vercel
+    - name: Deploy Client
       working-directory: ./client
       run: |
-        echo "Installing Vercel CLI..."
         npm i -g vercel
-        echo "Deploying client..."
-        vercel deploy . --prod --yes --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
+        vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
+        vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
       env:
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CLIENT_PROJECT_ID }}
