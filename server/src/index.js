@@ -1,5 +1,9 @@
-// Import global polyfills and configurations
-require("./utils/global.js");
+// Global polyfills and configurations
+global.alert = (msg) => console.log('[Alert]:', msg);
+global.confirm = (msg) => console.log('[Confirm]:', msg);
+global.prompt = (msg) => console.log('[Prompt]:', msg);
+global.isServer = true;
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -67,7 +71,7 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 // Initialize WebSocket server
-const wss = setupWebSocket(server);
+setupWebSocket(server);
 
 server.listen(PORT, () => {
   console.log(`Hello World! Server is running on port ${PORT}`);
