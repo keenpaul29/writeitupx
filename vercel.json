@@ -1,31 +1,56 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "outputDirectory": "client/dist",
+  "outputDirectory": "packages/client/dist",
   "builds": [
     {
-      "src": "client/package.json",
+      "src": "packages/client/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "dist",
+        "buildCommand": "npm run build"
       }
     },
     {
-      "src": "server/src/index.js",
-      "use": "@vercel/node"
+      "src": "packages/server/src/index.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "packages/server/src/**"
+        ]
+      }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "server/src/index.js"
+      "dest": "packages/server/src/index.js"
+    },
+    {
+      "src": "/socket.io/(.*)",
+      "dest": "packages/server/src/index.js"
+    },
+    {
+      "src": "/auth/(.*)",
+      "dest": "packages/server/src/index.js"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "client/dist/$1"
+      "dest": "packages/client/dist/$1"
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "PORT": "5000"
+  },
+  "regions": ["iad1"],
+  "functions": {
+    "packages/server/src/index.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
   }
 }
