@@ -15,32 +15,6 @@ import NotFound from './pages/NotFound';
 // Components
 import Layout from './components/Layout';
 
-<<<<<<< HEAD
-// Error Boundary Component
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error, errorInfo) {
-    console.error('App error:', error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return <div>Something went wrong. Please refresh the page.</div>;
-    }
-    return this.props.children;
-  }
-}
-
-=======
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
 // Create a theme instance
 const theme = createTheme({
   palette: {
@@ -77,49 +51,6 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-<<<<<<< HEAD
-    <ErrorBoundary>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="login" element={<Login />} />
-            <Route path="auth/success" element={<AuthSuccess />} />
-            <Route 
-              path="dashboard" 
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="editor/:id" 
-              element={
-                <ProtectedRoute>
-                  <LetterEditor />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="editor" 
-              element={
-                <ProtectedRoute>
-                  <LetterEditor />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </ThemeProvider>
-    </ErrorBoundary>
-  );
-}
-
-export default App; 
-=======
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
@@ -159,4 +90,3 @@ export default App;
 }
 
 export default App; 
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b

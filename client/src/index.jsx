@@ -25,12 +25,4 @@ if (process.env.NODE_ENV === 'production') {
   console.log('API URL:', import.meta.env.VITE_API_URL);
   console.log('Base URL:', window.location.origin);
 }
-import './index.css';
-import App from './App';
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
 
