@@ -15,14 +15,6 @@
       "dest": "src/index.js"
     },
     {
-      "src": "/auth/(.*)",
-      "dest": "src/index.js"
-    },
-    {
-      "src": "/socket.io/(.*)",
-      "dest": "src/index.js"
-    },
-    {
       "src": "/(.*)",
       "dest": "src/index.js"
     }
