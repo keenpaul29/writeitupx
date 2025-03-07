@@ -19,24 +19,25 @@ jobs:
       with:
         node-version: 18
 
-    - name: Deploy Server
+    - name: Deploy API
       working-directory: ./server
       run: |
+        npm install
         npm i -g vercel
-        vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
-        vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
+        vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
       env:
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SERVER_PROJECT_ID }}
 
-    - name: Deploy Client
+    - name: Deploy Frontend
       working-directory: ./client
       run: |
+        npm install
         npm i -g vercel
-        vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
-        vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }} --scope keenpaul29s-projects
+        vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
       env:
         VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         VERCEL_PROJECT_ID: ${{ secrets.VERCEL_CLIENT_PROJECT_ID }}
-
-
+        VITE_API_URL: https://writeupx-api.keenpaul29s-projects.vercel.app

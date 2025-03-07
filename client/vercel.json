@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "alias": ["writeupx.keenpaul29s-projects.vercel.app"]
+}
