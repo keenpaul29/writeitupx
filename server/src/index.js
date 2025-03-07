@@ -1,3 +1,4 @@
+import './utils/global.js';  // Fix the import path issue
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
