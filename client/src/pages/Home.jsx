@@ -37,11 +37,12 @@ const Home = () => {
       <Box
         sx={{
           position: 'relative',
-          height: '100vh',
+          minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
+          py: { xs: 8, md: 0 },
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -49,7 +50,7 @@ const Home = () => {
             left: 0,
             right: 0,
             bottom: 0,
-            background: `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0.92)} 0%, ${alpha(theme.palette.primary.main, 0.85)} 100%)`,
+            background: `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0.94)} 0%, ${alpha(theme.palette.primary.main, 0.87)} 100%)`,
             zIndex: 1,
           },
         }}
@@ -63,6 +64,15 @@ const Home = () => {
             height: '110%',
             zIndex: 0,
             overflow: 'hidden',
+            animation: 'pulse 8s ease-in-out infinite',
+            '@keyframes pulse': {
+              '0%, 100%': {
+                transform: 'scale(1)',
+              },
+              '50%': {
+                transform: 'scale(1.05)',
+              },
+            },
           }}
         >
           <LetterGlitch
@@ -87,57 +97,135 @@ const Home = () => {
         </Box>
 
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-          <Grid container spacing={4} alignItems="center">
+          <Grid 
+            container 
+            spacing={{ xs: 4, md: 8 }} 
+            alignItems="center"
+            sx={{ 
+              flexDirection: { xs: 'column-reverse', md: 'row' },
+              textAlign: { xs: 'center', md: 'left' }
+            }}
+          >
             <Grid item xs={12} md={6}>
-              <Typography
-                variant="h1"
-                component="h1"
+              <Box
                 sx={{
-                  fontWeight: 800,
-                  color: 'white',
-                  fontSize: { xs: '2.5rem', md: '3.5rem' },
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                  mb: 2,
-                }}
-              >
-                Write Better Letters with AI
-              </Typography>
-              <Typography
-                variant="h5"
-                sx={{
-                  color: 'rgba(255,255,255,0.9)',
-                  mb: 4,
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.2)',
-                }}
-              >
-                Create professional letters with AI assistance and seamless Google Drive integration
-              </Typography>
-              <Button
-                variant="contained"
-                size="large"
-                sx={{
-                  backgroundColor: 'white',
-                  color: theme.palette.primary.main,
-                  fontSize: '1.2rem',
-                  py: 1.5,
-                  px: 4,
-                  '&:hover': {
-                    backgroundColor: alpha(theme.palette.common.white, 0.9),
+                  animation: 'slideUp 0.8s ease-out',
+                  '@keyframes slideUp': {
+                    from: {
+                      opacity: 0,
+                      transform: 'translateY(30px)',
+                    },
+                    to: {
+                      opacity: 1,
+                      transform: 'translateY(0)',
+                    },
                   },
                 }}
-                component={RouterLink}
-                to={isAuthenticated ? "/dashboard" : "/login"}
-                startIcon={isAuthenticated ? <Description /> : <AutoAwesome />}
               >
-                {isAuthenticated ? 'Go to Dashboard' : 'Get Started Free'}
-              </Button>
+                <Typography
+                  variant="h1"
+                  component="h1"
+                  sx={{
+                    fontWeight: 800,
+                    color: 'white',
+                    fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem', lg: '4rem' },
+                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+                    mb: { xs: 2, md: 3 },
+                    background: 'linear-gradient(45deg, #fff, #f0f0f0)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    letterSpacing: '-0.02em',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  Write Better Letters with AI
+                </Typography>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: 'rgba(255,255,255,0.95)',
+                    mb: { xs: 3, md: 4 },
+                    textShadow: '1px 1px 2px rgba(0,0,0,0.2)',
+                    fontSize: { xs: '1.2rem', sm: '1.4rem', md: '1.5rem' },
+                    fontWeight: 400,
+                    lineHeight: 1.4,
+                  }}
+                >
+                  Create professional letters with AI assistance and seamless Google Drive integration
+                </Typography>
+                <Box sx={{ 
+                  display: 'flex', 
+                  gap: 2,
+                  justifyContent: { xs: 'center', md: 'flex-start' },
+                }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      backgroundColor: 'white',
+                      color: theme.palette.primary.main,
+                      fontSize: { xs: '1.1rem', md: '1.2rem' },
+                      py: { xs: 1.2, md: 1.5 },
+                      px: { xs: 3, md: 4 },
+                      borderRadius: '30px',
+                      boxShadow: '0 4px 14px 0 rgba(0,0,0,0.2)',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        backgroundColor: alpha(theme.palette.common.white, 0.9),
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 6px 20px 0 rgba(0,0,0,0.3)',
+                      },
+                    }}
+                    component={RouterLink}
+                    to={isAuthenticated ? "/dashboard" : "/login"}
+                    startIcon={
+                      <Box sx={{ 
+                        display: 'flex', 
+                        alignItems: 'center',
+                        animation: 'bounce 2s infinite',
+                        '@keyframes bounce': {
+                          '0%, 100%': { transform: 'translateY(0)' },
+                          '50%': { transform: 'translateY(-3px)' }
+                        }
+                      }}>
+                        {isAuthenticated ? <Description /> : <AutoAwesome />}
+                      </Box>
+                    }
+                  >
+                    {isAuthenticated ? 'Go to Dashboard' : 'Get Started Free'}
+                  </Button>
+                  {!isAuthenticated && (
+                    <Button
+                      variant="outlined"
+                      size="large"
+                      sx={{
+                        borderColor: 'rgba(255,255,255,0.5)',
+                        color: 'white',
+                        fontSize: { xs: '1.1rem', md: '1.2rem' },
+                        py: { xs: 1.2, md: 1.5 },
+                        px: { xs: 3, md: 4 },
+                        borderRadius: '30px',
+                        borderWidth: '2px',
+                        '&:hover': {
+                          borderColor: 'white',
+                          backgroundColor: 'rgba(255,255,255,0.1)',
+                        },
+                      }}
+                      component={RouterLink}
+                      to="/demo"
+                    >
+                      Watch Demo
+                    </Button>
+                  )}
+                </Box>
+              </Box>
             </Grid>
             <Grid 
               item 
               xs={12} 
               md={6}
               sx={{
-                display: { xs: 'none', md: 'flex' },
+                display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
@@ -146,15 +234,24 @@ const Home = () => {
                 sx={{
                   position: 'relative',
                   width: '100%',
-                  maxWidth: 500,
-                  height: 400,
+                  maxWidth: { xs: 400, md: 500 },
+                  height: { xs: 300, md: 400 },
                   borderRadius: 4,
                   overflow: 'hidden',
                   boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
                   transform: 'perspective(1000px) rotateY(-5deg)',
-                  transition: 'transform 0.3s ease-in-out',
+                  transition: 'all 0.5s ease-in-out',
+                  animation: 'float 6s ease-in-out infinite',
+                  '@keyframes float': {
+                    '0%, 100%': {
+                      transform: 'perspective(1000px) rotateY(-5deg) translateY(0)',
+                    },
+                    '50%': {
+                      transform: 'perspective(1000px) rotateY(-5deg) translateY(-20px)',
+                    },
+                  },
                   '&:hover': {
-                    transform: 'perspective(1000px) rotateY(0deg)',
+                    transform: 'perspective(1000px) rotateY(0deg) scale(1.02)',
                   },
                   '&::before': {
                     content: '""',
@@ -177,6 +274,10 @@ const Home = () => {
                     height: '100%',
                     objectFit: 'cover',
                     filter: 'brightness(0.9)',
+                    transition: 'transform 0.5s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                    },
                   }}
                 />
                 <Box

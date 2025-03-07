@@ -74,4 +74,9 @@ server.listen(PORT, () => {
   alert("Server is running!!");
 });
 
-app.get("/", (_, res) => res.send("Hello World!"));
+app.get("/", (req, res) => {
+  res.status(200).json({
+    message: "API is running",
+    version: "1.0.0"
+  });
+});
