@@ -34,8 +34,4 @@ RUN npm ci --only=production
 EXPOSE 5000
 
 # Start the application
-<<<<<<< HEAD
 CMD ["npm", "start"] 
-=======
-CMD ["npm", "start"] 
->>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
