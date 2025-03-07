@@ -16,6 +16,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: true,
+<<<<<<< HEAD
     rollupOptions: {
       output: {
         manualChunks: {
@@ -35,11 +36,17 @@ export default defineConfig({
       },
     },
     assetsDir: 'assets',
+=======
+>>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+<<<<<<< HEAD
   },
   base: '/',
+=======
+  }
+>>>>>>> 2a5f2f12f9bce822fb160c1e7cc8688cfe67684b
 }); 
