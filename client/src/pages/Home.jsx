@@ -340,9 +340,11 @@ const Home = () => {
               p: { xs: 2, md: 4 },
               backgroundColor: 'white',
               borderRadius: 2,
+              maxWidth: 800,
+              mx: 'auto',
             }}
           >
-            <List>
+            <List sx={{ width: '100%' }}>
               {[
                 {
                   step: '01',
@@ -369,9 +371,12 @@ const Home = () => {
                     py: 3,
                     borderBottom: 
                       index < 2 ? `1px solid ${alpha(theme.palette.primary.main, 0.1)}` : 'none',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: 'center',
+                    textAlign: { xs: 'center', sm: 'left' },
                   }}
                 >
-                  <ListItemIcon>
+                  <ListItemIcon sx={{ minWidth: 'auto', mb: { xs: 2, sm: 0 } }}>
                     <Box
                       sx={{
                         width: 50,
@@ -389,12 +394,17 @@ const Home = () => {
                   </ListItemIcon>
                   <ListItemText
                     primary={
-                      <Typography variant="h6" gutterBottom>
+                      <Typography variant="h6" gutterBottom align={window.innerWidth < 600 ? 'center' : 'left'}>
                         {step.primary}
                       </Typography>
                     }
                     secondary={step.secondary}
-                    sx={{ ml: 2 }}
+                    sx={{ 
+                      ml: { xs: 0, sm: 2 },
+                      '& .MuiListItemText-secondary': {
+                        textAlign: { xs: 'center', sm: 'left' }
+                      }
+                    }}
                   />
                 </ListItem>
               ))}

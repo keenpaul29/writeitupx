@@ -3,6 +3,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Container, Typography, Paper } from '@mui/material';
 import { Home as HomeIcon } from '@mui/icons-material';
 
+
 const NotFound = () => {
   return (
     <Container maxWidth="md">
