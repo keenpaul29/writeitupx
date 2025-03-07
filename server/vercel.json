@@ -2,34 +2,29 @@
   "version": 2,
   "builds": [
     {
-      "src": "./src/index.js",
+      "src": "src/index.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": [
-          "./src/**"
-        ]
+        "includeFiles": ["src/**"]
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "./src/index.js"
+      "dest": "src/index.js"
     },
     {
       "src": "/auth/(.*)",
-      "dest": "./src/index.js"
+      "dest": "src/index.js"
     },
     {
       "src": "/socket.io/(.*)",
-      "dest": "./src/index.js"
+      "dest": "src/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "./src/index.js"
+      "dest": "src/index.js"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
