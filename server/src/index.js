@@ -66,6 +66,7 @@ const wss = setupWebSocket(server);
 
 server.listen(PORT, () => {
   console.log(`Hello World! Server is running on port ${PORT}`);
+  alert("Server is running!!")
 });
 
 
