@@ -1,32 +1,15 @@
 {
-  "name": "writeupx",
+  "name": "writeitupx",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
-    "dev:client": "npm run dev --workspace=packages/client",
-    "dev:server": "npm run dev --workspace=packages/server",
     "build": "npm run build:client && npm run build:server",
     "build:client": "npm run build --workspace=packages/client",
     "build:server": "npm run build --workspace=packages/server",
     "start": "npm run start:server",
-    "start:server": "npm run start --workspace=packages/server",
-    "test": "npm run test --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present",
-    "clean": "cross-env rimraf \"packages/client/dist\" \"packages/client/build\" \"packages/server/dist\" \"packages/server/build\"",
-    "vercel-build": "npm run build",
-    "postinstall": "npm run build"
-  },
-  "devDependencies": {
-    "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3",
-    "rimraf": "^5.0.5"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "start:server": "npm run start --workspace=packages/server"
   }
 }
