@@ -1,24 +1,18 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,json,vue,txt,woff2}']
-      }
-    })
-  ],
-  define: {
-    global: 'window',
-  },
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
+  plugins: [react()],
+  server: {
+    port: process.env.PORT || 3000,
+    host: '0.0.0.0', // This is important for Render
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
     },
   },
   build: {
@@ -32,10 +26,7 @@ export default defineConfig({
           'mui-vendor': ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
           'editor-vendor': ['draft-js'],
           'utils-vendor': ['axios', 'jwt-decode', 'socket.io-client']
-        },
-        // Ensure chunks have consistent names for better caching
-        chunkFileNames: 'assets/[name]-[hash].js',
-        assetFileNames: 'assets/[name]-[hash][extname]'
+        }
       }
     }
   },

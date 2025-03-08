@@ -4,9 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port $PORT",
     "build": "vite build",
-    "preview": "vite preview",
+    "preview": "vite preview --port $PORT --host",
+    "start": "vite preview --port $PORT --host",
     "build:prod": "vite build --mode production"
   },
   "dependencies": {
