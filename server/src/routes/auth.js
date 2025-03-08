@@ -30,8 +30,13 @@ router.get('/check-status', (req, res) => {
 // Google OAuth routes
 router.get('/google',
   passport.authenticate('google', { 
-    scope: ['profile', 'email'],
-    prompt: 'select_account'
+    scope: [
+      'profile',
+      'email',
+      'https://www.googleapis.com/auth/drive.file'
+    ],
+    prompt: 'consent',
+    accessType: 'offline'
   })
 );
 
@@ -41,10 +46,23 @@ router.get('/google/callback',
     session: true
   }),
   (req, res) => {
-    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-      expiresIn: '15m'
-    });
-    res.redirect(`/auth-success?token=${token}`);
+    try {
+      // Generate JWT token
+      const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
+        expiresIn: '15m'
+      });
+
+      // Determine client URL
+      const clientUrl = process.env.NODE_ENV === 'production'
+        ? process.env.CLIENT_URL || 'https://writeitupx.netlify.app'
+        : 'http://localhost:3000';
+
+      // Redirect to client with token
+      res.redirect(`${clientUrl}/auth-success?token=${token}`);
+    } catch (error) {
+      console.error('Callback error:', error);
+      res.redirect(`${clientUrl}/login?error=auth_failed`);
+    }
   }
 );
 

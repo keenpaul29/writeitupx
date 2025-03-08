@@ -24,9 +24,9 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     setLoading(true);
-    // Remove any potential double slashes by using URL constructor
+    
     const baseUrl = process.env.NODE_ENV === 'production'
-      ? window.location.origin
+      ? process.env.VITE_API_URL || 'https://writeitupx-server.onrender.com'
       : 'http://localhost:5000';
     
     window.location.href = new URL('/api/auth/google', baseUrl).href;

@@ -5,10 +5,10 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/user');
 
 const getCallbackUrl = () => {
-  const baseUrl = (process.env.NODE_ENV === 'production'
-    ? process.env.SERVER_URL
-    : 'http://localhost:5000').replace(/([^:]\/)\/+/g, "$1");
-  return `${baseUrl}/api/auth/google/callback`.replace(/([^:]\/)\/+/g, "$1");
+  const baseUrl = process.env.NODE_ENV === 'production'
+    ? 'https://writeitupx-server.onrender.com'
+    : 'http://localhost:5000';
+  return `${baseUrl}/api/auth/google/callback`;
 };
 
 // Google OAuth Strategy
@@ -16,7 +16,12 @@ passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: getCallbackUrl(),
-    passReqToCallback: true
+    passReqToCallback: true,
+    scope: [
+      'profile',
+      'email',
+      'https://www.googleapis.com/auth/drive.file'
+    ]
   },
   async (req, accessToken, refreshToken, profile, done) => {
     try {
