@@ -4,11 +4,17 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/user');
 
+// Ensure SERVER_URL is properly set
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:8000';
+console.log('Current SERVER_URL:', SERVER_URL);
+const callbackURL = `${SERVER_URL}/api/auth/google/callback`;
+console.log('Google OAuth callback URL:', callbackURL);
+
 // Google OAuth Strategy
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
+    callbackURL: callbackURL,
     passReqToCallback: true
   },
   async (req, accessToken, refreshToken, profile, done) => {
@@ -40,7 +46,9 @@ passport.use(new GoogleStrategy({
         user.googleId = profile.id;
         user.isGoogleUser = true;
         user.googleAccessToken = accessToken;
-        user.googleRefreshToken = refreshToken;
+        if (refreshToken) {
+          user.googleRefreshToken = refreshToken;
+        }
         await user.save();
         console.log('Existing user updated:', user.email);
       }

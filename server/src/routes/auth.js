@@ -67,15 +67,23 @@ router.get('/google/callback',
         maxAge: 15 * 60 * 1000 // 15 minutes
       });
 
-      // Redirect to the client application
-      const redirectUrl = process.env.NODE_ENV === 'production'
-        ? `${process.env.CLIENT_URL}/auth-success`
-        : 'http://localhost:3000/auth-success';
+      // Redirect to the auth success page with token
+      const clientUrl = process.env.NODE_ENV === 'production'
+        ? process.env.CLIENT_URL
+        : 'http://localhost:3000';
       
-      res.redirect(`${redirectUrl}?token=${token}`);
+      // Ensure we're using the correct path that matches the React Router configuration
+      const redirectPath = '/auth/success';
+      const redirectUrl = `${clientUrl}${redirectPath}?token=${token}`;
+      
+      console.log('Redirecting to:', redirectUrl);
+      res.redirect(redirectUrl);
     } catch (error) {
       console.error('Error in Google OAuth callback:', error);
-      res.redirect('/login?error=auth_failed');
+      const loginUrl = process.env.NODE_ENV === 'production'
+        ? `${process.env.CLIENT_URL}/login`
+        : 'http://localhost:3000/login';
+      res.redirect(`${loginUrl}?error=auth_failed`);
     }
   }
 );

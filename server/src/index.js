@@ -49,7 +49,7 @@ app.use(
       : ['http://localhost:3000', 'http://localhost:8000', 'https://accounts.google.com'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin']
+    allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Origin', 'Cookie']
   })
 );
 
@@ -65,7 +65,10 @@ app.use(session({
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    maxAge: 24 * 60 * 60 * 1000 // 1 day
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    domain: process.env.NODE_ENV === 'production' 
+      ? '.onrender.com'  // Allow cookies across subdomains
+      : 'localhost'
   }
 }));
 
