@@ -5,14 +5,10 @@ import {
   Button,
   Container,
   Grid,
-  Paper,
   Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   useTheme,
   alpha,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Description,
@@ -23,80 +19,69 @@ import {
   AutoAwesome,
   CloudDone,
   Psychology,
+  Spellcheck,
+  Style,
+  Share,
 } from '@mui/icons-material';
 import { useAuth } from '../hooks/useAuth';
 import LetterGlitch from '../components/LetterGlitch';
+import FeatureCard from '../components/FeatureCard';
+import AnimatedBackground from '../components/AnimatedBackground';
+
+const features = [
+  {
+    icon: AutoAwesome,
+    title: 'AI-Powered Writing',
+    description: 'Get intelligent suggestions and improvements for your letters using advanced AI technology.',
+  },
+  {
+    icon: Speed,
+    title: 'Quick Generation',
+    description: 'Create professional letters in minutes with smart templates and automated formatting.',
+  },
+  {
+    icon: Style,
+    title: 'Custom Styling',
+    description: 'Choose from a variety of professional templates and customize them to match your brand.',
+  },
+  {
+    icon: Spellcheck,
+    title: 'Grammar Check',
+    description: 'Ensure error-free writing with advanced grammar and spell checking.',
+  },
+  {
+    icon: CloudDone,
+    title: 'Cloud Integration',
+    description: 'Seamlessly save and access your letters through Google Drive integration.',
+  },
+  {
+    icon: Share,
+    title: 'Easy Sharing',
+    description: 'Share your letters with colleagues and collaborate in real-time.',
+  },
+];
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-    <Box sx={{ overflow: 'hidden', position: 'relative' }}>
-      {/* Hero Section with Glitch Effect Background */}
+    <Box sx={{ overflow: 'hidden' }}>
+      {/* Hero Section */}
       <Box
         sx={{
           position: 'relative',
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          py: { xs: 8, md: 0 },
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `linear-gradient(135deg, ${alpha(theme.palette.primary.dark, 0.94)} 0%, ${alpha(theme.palette.primary.main, 0.87)} 100%)`,
-            zIndex: 1,
-          },
+          pt: { xs: 8, md: 0 },
+          pb: { xs: 4, md: 0 },
         }}
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '-5%',
-            left: '-5%',
-            width: '110%',
-            height: '110%',
-            zIndex: 0,
-            overflow: 'hidden',
-            animation: 'pulse 8s ease-in-out infinite',
-            '@keyframes pulse': {
-              '0%, 100%': {
-                transform: 'scale(1)',
-              },
-              '50%': {
-                transform: 'scale(1.05)',
-              },
-            },
-          }}
-        >
-          <LetterGlitch
-            glitchSpeed={30}
-            centerVignette={true}
-            outerVignette={true}
-            smooth={true}
-            density={2}
-            style={{
-              width: '100%',
-              height: '100%',
-              transform: 'scale(1.2)',
-              filter: 'blur(0.5px)',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-            letters="WRITEUPX"
-          />
-        </Box>
-
-        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
+        <AnimatedBackground />
+        
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Grid 
             container 
             spacing={{ xs: 4, md: 8 }} 
@@ -124,18 +109,15 @@ const Home = () => {
               >
                 <Typography
                   variant="h1"
-                  component="h1"
                   sx={{
                     fontWeight: 800,
-                    color: 'white',
                     fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem', lg: '4rem' },
-                    textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-                    mb: { xs: 2, md: 3 },
-                    background: 'linear-gradient(45deg, #fff, #f0f0f0)',
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     letterSpacing: '-0.02em',
                     lineHeight: 1.2,
+                    mb: { xs: 2, md: 3 },
                   }}
                 >
                   Write Better Letters with AI
@@ -143,12 +125,13 @@ const Home = () => {
                 <Typography
                   variant="h5"
                   sx={{
-                    color: 'rgba(255,255,255,0.95)',
+                    color: 'text.secondary',
                     mb: { xs: 3, md: 4 },
-                    textShadow: '1px 1px 2px rgba(0,0,0,0.2)',
                     fontSize: { xs: '1.2rem', sm: '1.4rem', md: '1.5rem' },
                     fontWeight: 400,
                     lineHeight: 1.4,
+                    maxWidth: '600px',
+                    mx: { xs: 'auto', md: 0 },
                   }}
                 >
                   Create professional letters with AI assistance and seamless Google Drive integration
@@ -157,23 +140,22 @@ const Home = () => {
                   display: 'flex', 
                   gap: 2,
                   justifyContent: { xs: 'center', md: 'flex-start' },
+                  flexWrap: 'wrap',
                 }}>
                   <Button
                     variant="contained"
                     size="large"
                     sx={{
-                      backgroundColor: 'white',
-                      color: theme.palette.primary.main,
+                      background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
                       fontSize: { xs: '1.1rem', md: '1.2rem' },
                       py: { xs: 1.2, md: 1.5 },
                       px: { xs: 3, md: 4 },
                       borderRadius: '30px',
-                      boxShadow: '0 4px 14px 0 rgba(0,0,0,0.2)',
+                      boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.35)}`,
                       transition: 'all 0.3s ease',
                       '&:hover': {
-                        backgroundColor: alpha(theme.palette.common.white, 0.9),
                         transform: 'translateY(-2px)',
-                        boxShadow: '0 6px 20px 0 rgba(0,0,0,0.3)',
+                        boxShadow: `0 6px 20px ${alpha(theme.palette.primary.main, 0.45)}`,
                       },
                     }}
                     component={RouterLink}
@@ -199,16 +181,16 @@ const Home = () => {
                       variant="outlined"
                       size="large"
                       sx={{
-                        borderColor: 'rgba(255,255,255,0.5)',
-                        color: 'white',
+                        borderColor: alpha(theme.palette.primary.main, 0.5),
+                        color: 'text.primary',
                         fontSize: { xs: '1.1rem', md: '1.2rem' },
                         py: { xs: 1.2, md: 1.5 },
                         px: { xs: 3, md: 4 },
                         borderRadius: '30px',
                         borderWidth: '2px',
                         '&:hover': {
-                          borderColor: 'white',
-                          backgroundColor: 'rgba(255,255,255,0.1)',
+                          borderColor: 'primary.main',
+                          backgroundColor: alpha(theme.palette.primary.main, 0.05),
                         },
                       }}
                       component={RouterLink}
@@ -238,7 +220,7 @@ const Home = () => {
                   height: { xs: 300, md: 400 },
                   borderRadius: 4,
                   overflow: 'hidden',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                  boxShadow: `0 20px 40px ${alpha(theme.palette.common.black, 0.2)}`,
                   transform: 'perspective(1000px) rotateY(-5deg)',
                   transition: 'all 0.5s ease-in-out',
                   animation: 'float 6s ease-in-out infinite',
@@ -251,46 +233,23 @@ const Home = () => {
                     },
                   },
                   '&:hover': {
-                    transform: 'perspective(1000px) rotateY(0deg) scale(1.02)',
-                  },
-                  '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(45deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))',
-                    zIndex: 2,
+                    transform: 'perspective(1000px) rotateY(0deg) translateY(-10px)',
                   },
                 }}
               >
-                <Box
-                  component="img"
-                  src="/hero-image.jpg"
-                  alt="AI-powered letter writing"
-                  sx={{
+                <LetterGlitch
+                  glitchSpeed={30}
+                  centerVignette={true}
+                  outerVignette={true}
+                  smooth={true}
+                  density={2}
+                  style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover',
-                    filter: 'brightness(0.9)',
-                    transition: 'transform 0.5s ease',
-                    '&:hover': {
-                      transform: 'scale(1.05)',
-                    },
+                    transform: 'scale(1.2)',
+                    filter: 'blur(0.5px)',
                   }}
-                />
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: alpha(theme.palette.primary.dark, 0.2),
-                    backdropFilter: 'blur(2px)',
-                    zIndex: 1,
-                  }}
+                  letters="WRITEUPX"
                 />
               </Box>
             </Grid>
@@ -299,252 +258,50 @@ const Home = () => {
       </Box>
 
       {/* Features Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Typography
-          variant="h2"
-          component="h2"
-          align="center"
-          sx={{
-            fontWeight: 700,
-            mb: 6,
-            fontSize: { xs: '2rem', md: '2.5rem' },
-          }}
-        >
-          Powerful Features
-        </Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 4,
-                height: '100%',
-                borderRadius: 2,
-                backgroundColor: alpha(theme.palette.primary.main, 0.03),
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                },
-              }}
-            >
-              <Typography variant="h5" component="h3" gutterBottom color="primary">
-                AI-Powered Writing
-              </Typography>
-              <List>
-                {[
-                  {
-                    icon: <Psychology />,
-                    primary: 'Smart Suggestions',
-                    secondary: 'Get real-time writing improvements and recommendations',
-                  },
-                  {
-                    icon: <AutoAwesome />,
-                    primary: 'Style Enhancement',
-                    secondary: 'Perfect your tone and style for any professional context',
-                  },
-                  {
-                    icon: <Save />,
-                    primary: 'Auto-Save',
-                    secondary: 'Never lose your work with automatic saving as you type',
-                  },
-                ].map((item, index) => (
-                  <ListItem key={index} sx={{ py: 2 }}>
-                    <ListItemIcon sx={{ color: theme.palette.primary.main }}>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.primary}
-                      secondary={item.secondary}
-                      primaryTypographyProps={{
-                        fontWeight: 600,
-                        gutterBottom: true,
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Paper
-              elevation={0}
-              sx={{
-                p: 4,
-                height: '100%',
-                borderRadius: 2,
-                backgroundColor: alpha(theme.palette.primary.main, 0.03),
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                },
-              }}
-            >
-              <Typography variant="h5" component="h3" gutterBottom color="primary">
-                Seamless Integration
-              </Typography>
-              <List>
-                {[
-                  {
-                    icon: <CloudDone />,
-                    primary: 'Google Drive Sync',
-                    secondary: 'Automatic backup and sync with your Google Drive',
-                  },
-                  {
-                    icon: <Speed />,
-                    primary: 'Real-time Updates',
-                    secondary: 'Changes are instantly saved and synced across devices',
-                  },
-                  {
-                    icon: <Security />,
-                    primary: 'Secure Access',
-                    secondary: 'Protected with Google OAuth authentication',
-                  },
-                ].map((item, index) => (
-                  <ListItem key={index} sx={{ py: 2 }}>
-                    <ListItemIcon sx={{ color: theme.palette.primary.main }}>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={item.primary}
-                      secondary={item.secondary}
-                      primaryTypographyProps={{
-                        fontWeight: 600,
-                        gutterBottom: true,
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
-
-      {/* How It Works Section */}
-      <Box sx={{ bgcolor: 'grey.50', py: 8 }}>
-        <Container maxWidth="lg">
+      <Box
+        sx={{
+          py: { xs: 8, md: 12 },
+          px: 2,
+          background: theme.palette.background.default,
+          position: 'relative',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100%',
+            background: `linear-gradient(180deg, 
+              ${alpha(theme.palette.primary.main, 0.05)} 0%, 
+              ${alpha(theme.palette.background.default, 0)} 100%)`,
+            zIndex: 0,
+          },
+        }}
+      >
+        <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Typography
             variant="h2"
-            component="h2"
             align="center"
             sx={{
+              mb: { xs: 6, md: 8 },
               fontWeight: 700,
-              mb: 6,
               fontSize: { xs: '2rem', md: '2.5rem' },
+              background: `linear-gradient(135deg, ${theme.palette.text.primary}, ${alpha(theme.palette.text.primary, 0.8)})`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }}
           >
-            How It Works
+            Powerful Features for Better Writing
           </Typography>
-          <Paper
-            elevation={0}
-            sx={{
-              p: { xs: 2, md: 4 },
-              backgroundColor: 'white',
-              borderRadius: 2,
-              maxWidth: 800,
-              mx: 'auto',
-            }}
-          >
-            <List sx={{ width: '100%' }}>
-              {[
-                {
-                  step: '01',
-                  icon: <Security sx={{ fontSize: 30 }} />,
-                  primary: 'Sign In with Google',
-                  secondary: 'Securely connect your Google account for seamless access to all features',
-                },
-                {
-                  step: '02',
-                  icon: <Edit sx={{ fontSize: 30 }} />,
-                  primary: 'Create & Edit Letters',
-                  secondary: 'Write your content with AI assistance providing real-time suggestions and improvements',
-                },
-                {
-                  step: '03',
-                  icon: <CloudDone sx={{ fontSize: 30 }} />,
-                  primary: 'Save & Share',
-                  secondary: 'Your letters are automatically saved to Google Drive and ready to share with your team',
-                },
-              ].map((step, index) => (
-                <ListItem
-                  key={index}
-                  sx={{
-                    py: 3,
-                    borderBottom: 
-                      index < 2 ? `1px solid ${alpha(theme.palette.primary.main, 0.1)}` : 'none',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    alignItems: 'center',
-                    textAlign: { xs: 'center', sm: 'left' },
-                  }}
-                >
-                  <ListItemIcon sx={{ minWidth: 'auto', mb: { xs: 2, sm: 0 } }}>
-                    <Box
-                      sx={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: '50%',
-                        backgroundColor: alpha(theme.palette.primary.main, 0.1),
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: theme.palette.primary.main,
-                      }}
-                    >
-                      {step.icon}
-                    </Box>
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Typography variant="h6" gutterBottom align={window.innerWidth < 600 ? 'center' : 'left'}>
-                        {step.primary}
-                      </Typography>
-                    }
-                    secondary={step.secondary}
-                    sx={{ 
-                      ml: { xs: 0, sm: 2 },
-                      '& .MuiListItemText-secondary': {
-                        textAlign: { xs: 'center', sm: 'left' }
-                      }
-                    }}
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
+          <Grid container spacing={4}>
+            {features.map((feature, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <FeatureCard {...feature} delay={0.2 + index * 0.1} />
+              </Grid>
+            ))}
+          </Grid>
         </Container>
       </Box>
-
-      {/* CTA Section */}
-      <Container maxWidth="md" sx={{ py: 8, textAlign: 'center' }}>
-        <Typography
-          variant="h3"
-          component="h2"
-          sx={{
-            fontWeight: 700,
-            mb: 3,
-            fontSize: { xs: '1.75rem', md: '2.25rem' },
-          }}
-        >
-          Ready to Write Better Letters?
-        </Typography>
-        <Typography variant="h6" color="text.secondary" sx={{ mb: 4 }}>
-          Join thousands of professionals who trust WriteitupX for their letter writing needs
-        </Typography>
-        <Button
-          variant="contained"
-          size="large"
-          component={RouterLink}
-          to={isAuthenticated ? "/dashboard" : "/login"}
-          startIcon={<AutoAwesome />}
-          sx={{
-            py: 2,
-            px: 4,
-            fontSize: '1.1rem',
-          }}
-        >
-          {isAuthenticated ? 'Go to Dashboard' : 'Start Writing Now'}
-        </Button>
-      </Container>
     </Box>
   );
 };

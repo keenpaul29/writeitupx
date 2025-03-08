@@ -1,5 +1,5 @@
 {
-  "name": "writeupx-server",
+  "name": "writeitupx-server",
   "version": "1.0.0",
   "description": "Backend server for WriteupX application",
   "main": "src/index.js",

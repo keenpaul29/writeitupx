@@ -5,53 +5,45 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/user');
 
 // Google OAuth Strategy
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
-    passReqToCallback: true
-  },
-  async (req, accessToken, refreshToken, profile, done) => {
-    try {
-      console.log('Google OAuth callback received for:', profile.emails[0].value);
-      
-      // Check if user already exists
-      let user = await User.findOne({ 
-        $or: [
-          { googleId: profile.id },
-          { email: profile.emails[0].value }
-        ]
-      });
-      
-      if (!user) {
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: '/api/auth/google/callback',
+      proxy: true
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      try {
+        // Check if user already exists
+        let user = await User.findOne({ googleId: profile.id });
+
+        if (user) {
+          // Update user information if needed
+          user.lastLogin = new Date();
+          await user.save();
+          return done(null, user);
+        }
+
         // Create new user if doesn't exist
         user = new User({
           googleId: profile.id,
           email: profile.emails[0].value,
           name: profile.displayName,
-          isGoogleUser: true,
-          googleAccessToken: accessToken,
-          googleRefreshToken: refreshToken
+          avatar: profile.photos[0]?.value,
+          accessToken,
+          refreshToken
         });
+
         await user.save();
-        console.log('New user created:', user.email);
-      } else {
-        // Update existing user
-        user.googleId = profile.id;
-        user.isGoogleUser = true;
-        user.googleAccessToken = accessToken;
-        user.googleRefreshToken = refreshToken;
-        await user.save();
-        console.log('Existing user updated:', user.email);
+        done(null, user);
+      } catch (error) {
+        console.error('Google auth error:', error);
+        done(error, null);
       }
-      
-      return done(null, user);
-    } catch (error) {
-      console.error('Google Strategy Error:', error);
-      return done(error, null);
     }
-  }
-));
+  )
+);
 
 // JWT Strategy
 passport.use(new JwtStrategy({
