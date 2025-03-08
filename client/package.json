@@ -4,10 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port $PORT",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --port $PORT --host",
-    "start": "vite preview --port $PORT --host"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
