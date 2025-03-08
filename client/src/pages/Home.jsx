@@ -115,7 +115,7 @@ const Home = () => {
                     WebkitTextFillColor: 'transparent',
                   }}
                 >
-                  WriteUpX
+                  WriteitupX
                 </Typography>
                 <Typography
                   variant="h2"
