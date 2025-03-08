@@ -23,11 +23,7 @@ const Login = () => {
   const authError = queryParams.get('error');
 
   const handleGoogleLogin = () => {
-    setLoading(true);
-    const baseUrl = process.env.NODE_ENV === 'production'
-      ? import.meta.env.VITE_API_URL
-      : 'http://localhost:8000';
-    console.log(baseUrl)
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
     window.location.href = `${baseUrl}/api/auth/google`;
   };
 

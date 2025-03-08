@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Box, CircularProgress } from '@mui/material';
 import { useAuth } from './hooks/useAuth';
 
 // Pages
@@ -11,11 +12,8 @@ import Dashboard from './pages/Dashboard';
 import LetterEditor from './pages/LetterEditor';
 import AuthSuccess from './pages/AuthSuccess';
 import NotFound from './pages/NotFound';
-
-// Components
 import Layout from './components/Layout';
 
-// Create a theme instance
 const theme = createTheme({
   palette: {
     primary: {
@@ -28,22 +26,28 @@ const theme = createTheme({
       default: '#f5f5f5',
     },
   },
-  typography: {
-    fontFamily: [
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-  },
 });
+
+// Loading component
+const LoadingScreen = () => (
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100vh',
+    }}
+  >
+    <CircularProgress />
+  </Box>
+);
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
   
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -53,38 +57,40 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="auth/success" element={<AuthSuccess />} />
-          <Route 
-            path="dashboard" 
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="editor/:id" 
-            element={
-              <ProtectedRoute>
-                <LetterEditor />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="editor" 
-            element={
-              <ProtectedRoute>
-                <LetterEditor />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
+      <Suspense fallback={<LoadingScreen />}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="auth/success" element={<AuthSuccess />} />
+            <Route 
+              path="dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="editor/:id" 
+              element={
+                <ProtectedRoute>
+                  <LetterEditor />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="editor" 
+              element={
+                <ProtectedRoute>
+                  <LetterEditor />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </ThemeProvider>
   );
 }

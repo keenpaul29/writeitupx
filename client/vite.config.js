@@ -4,9 +4,17 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+  define: {
+    'process.env': {},
+    global: 'window',
+  },
   server: {
     port: process.env.PORT || 3000,
-    host: '0.0.0.0', // This is important for Render
     proxy: {
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:8000',
@@ -29,5 +37,5 @@ export default defineConfig({
         }
       }
     }
-  },
+  }
 }); 
