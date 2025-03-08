@@ -30,7 +30,7 @@ WORKDIR /app/server
 RUN npm ci --only=production
 
 # Expose port
-EXPOSE 5000
+EXPOSE 8000
 
 # Start the application
 CMD ["node", "dist/index.js"]

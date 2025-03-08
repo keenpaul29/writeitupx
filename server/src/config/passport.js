@@ -13,7 +13,7 @@ passport.use(
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.NODE_ENV === 'production'
         ? `${process.env.SERVER_URL}/api/auth/google/callback`
-        : 'http://localhost:5000/api/auth/google/callback',
+        : 'http://localhost:8000/api/auth/google/callback',
       proxy: true
     },
     async (accessToken, refreshToken, profile, done) => {

@@ -37,7 +37,7 @@ npm install
 
 2. Create a `.env` file in the server directory:
 ```bash
-PORT=5000
+PORT=8000
 MONGODB_URI=mongodb://localhost:27017/writeupx
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret

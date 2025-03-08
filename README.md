@@ -94,7 +94,7 @@ writeupx/
 
    Create `server/.env`:
    ```
-   PORT=5000
+   PORT=8000
    MONGODB_URI=your_mongodb_uri
    GOOGLE_CLIENT_ID=your_google_client_id
    GOOGLE_CLIENT_SECRET=your_google_client_secret
@@ -105,7 +105,7 @@ writeupx/
 
    Create `client/.env`:
    ```
-   VITE_API_URL=http://localhost:5000
+   VITE_API_URL=http://localhost:8000
    ```
 
 4. **Start development servers**
