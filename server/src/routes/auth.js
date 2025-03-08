@@ -58,39 +58,6 @@ router.get('/google/callback',
       failureRedirect: `${process.env.CLIENT_URL}/login?error=auth_failed`,
       session: true
     })(req, res, next);
-  },
-  async (req, res) => {
-    try {
-      if (!req.user) {
-        throw new AuthError('Authentication failed', 'AUTH_FAILED', 401);
-      }
-
-      const token = jwt.sign(
-        { 
-          id: req.user.id,
-          email: req.user.email,
-          name: req.user.name
-        }, 
-        process.env.JWT_SECRET, 
-        { expiresIn: '15m' }
-      );
-
-      // Log successful authentication
-      console.log('Successful authentication:', {
-        userId: req.user.id,
-        email: req.user.email,
-        timestamp: new Date().toISOString()
-      });
-
-      res.redirect(`${process.env.CLIENT_URL}/auth-success?token=${token}`);
-    } catch (error) {
-      console.error('Token generation error:', {
-        message: error.message,
-        userId: req.user?.id,
-        stack: error.stack
-      });
-      res.redirect(`${process.env.CLIENT_URL}/login?error=token_failed`);
-    }
   }
 );
 
