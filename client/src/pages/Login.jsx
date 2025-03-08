@@ -24,10 +24,12 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     setLoading(true);
-    // Use the correct API path that matches the server route
-    window.location.href = process.env.NODE_ENV === 'production'
-      ? '/api/auth/google'
-      : 'http://localhost:5000/api/auth/google';
+    // Remove any potential double slashes by using URL constructor
+    const baseUrl = process.env.NODE_ENV === 'production'
+      ? window.location.origin
+      : 'http://localhost:5000';
+    
+    window.location.href = new URL('/api/auth/google', baseUrl).href;
   };
 
   return (

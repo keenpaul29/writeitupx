@@ -4,11 +4,18 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../models/user');
 
+const getCallbackUrl = () => {
+  const baseUrl = (process.env.NODE_ENV === 'production'
+    ? process.env.SERVER_URL
+    : 'http://localhost:5000').replace(/([^:]\/)\/+/g, "$1");
+  return `${baseUrl}/api/auth/google/callback`.replace(/([^:]\/)\/+/g, "$1");
+};
+
 // Google OAuth Strategy
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: `${process.env.SERVER_URL}/api/auth/google/callback`,
+    callbackURL: getCallbackUrl(),
     passReqToCallback: true
   },
   async (req, accessToken, refreshToken, profile, done) => {

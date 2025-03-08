@@ -15,12 +15,29 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
     />
-    <link rel="modulepreload" href="/assets/react-vendor.js">
-    <link rel="modulepreload" href="/assets/mui-vendor.js">
     <title>WriteitupX</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="./src/index.jsx"></script>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCDy1Xl6OcLKOJCQPA3cvjqzXW2a2tSFks",
+        authDomain: "writeitupx-85442.firebaseapp.com",
+        projectId: "writeitupx-85442",
+        storageBucket: "writeitupx-85442.firebasestorage.app",
+        messagingSenderId: "1008633626128",
+        appId: "1:1008633626128:web:759323cccb28f3da18d495"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+    </script>
   </body>
 </html> 
