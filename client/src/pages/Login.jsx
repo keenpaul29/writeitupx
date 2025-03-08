@@ -25,9 +25,9 @@ const Login = () => {
   const handleGoogleLogin = () => {
     setLoading(true);
     const baseUrl = process.env.NODE_ENV === 'production'
-      ? import.meta.env.VITE_API_URL
-      : 'http://localhost:5000';
-    window.location.href = `${baseUrl}/api/auth/google`;
+      ? `${import.meta.env.VITE_API_URL}`
+      : 'http://localhost:8000';
+    window.location.href = `${baseUrl}`+`/api/auth/google`;
   };
 
   return (

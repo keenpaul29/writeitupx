@@ -3,7 +3,7 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios';
 
 // Configure axios defaults
-axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? 'https://writeitupx-server.onrender.com' : 'http://localhost:5000';
+axios.defaults.baseURL = process.env.NODE_ENV === 'production' ? import.meta.env.VITE_API_URL : 'http://localhost:8000';
 axios.defaults.withCredentials = true;
 
 // Helper function to set auth header
