@@ -3,50 +3,68 @@ const router = express.Router();
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const { handleError, AuthError, errorTypes } = require('../utils/errorHandler');
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.status(401).json({ error: 'Unauthorized' });
+  throw new AuthError('Authentication required', 'AUTH_REQUIRED', 401);
 };
 
 // Check authentication status
 router.get('/check-status', (req, res) => {
-  if (req.isAuthenticated()) {
+  try {
+    if (!req.user) {
+      return res.json({ 
+        authenticated: false,
+        user: null
+      });
+    }
+
     res.json({ 
       authenticated: true,
-      user: req.user
+      user: {
+        id: req.user.id,
+        email: req.user.email,
+        name: req.user.name,
+        avatar: req.user.avatar
+      }
     });
-  } else {
-    res.json({ 
-      authenticated: false,
-      user: null
-    });
+  } catch (error) {
+    handleError(error, req, res);
   }
 });
 
 // Google OAuth routes
 router.get('/google',
-  passport.authenticate('google', { 
-    scope: [
-      'profile', 
-      'email',
-      'https://www.googleapis.com/auth/drive.file'
-    ],
-    accessType: 'offline',
-    prompt: 'consent'
-  })
+  (req, res, next) => {
+    passport.authenticate('google', { 
+      scope: [
+        'profile', 
+        'email',
+        'https://www.googleapis.com/auth/drive.file'
+      ],
+      accessType: 'offline',
+      prompt: 'consent'
+    })(req, res, next);
+  }
 );
 
 router.get('/google/callback',
-  passport.authenticate('google', { 
-    failureRedirect: `${process.env.CLIENT_URL}/login?error=auth_failed`,
-    session: true
-  }),
-  (req, res) => {
+  (req, res, next) => {
+    passport.authenticate('google', { 
+      failureRedirect: `${process.env.CLIENT_URL}/login?error=auth_failed`,
+      session: true
+    })(req, res, next);
+  },
+  async (req, res) => {
     try {
+      if (!req.user) {
+        throw new AuthError('Authentication failed', 'AUTH_FAILED', 401);
+      }
+
       const token = jwt.sign(
         { 
           id: req.user.id,
@@ -57,10 +75,20 @@ router.get('/google/callback',
         { expiresIn: '15m' }
       );
 
-      // Redirect to client with token
+      // Log successful authentication
+      console.log('Successful authentication:', {
+        userId: req.user.id,
+        email: req.user.email,
+        timestamp: new Date().toISOString()
+      });
+
       res.redirect(`${process.env.CLIENT_URL}/auth-success?token=${token}`);
     } catch (error) {
-      console.error('Token generation error:', error);
+      console.error('Token generation error:', {
+        message: error.message,
+        userId: req.user?.id,
+        stack: error.stack
+      });
       res.redirect(`${process.env.CLIENT_URL}/login?error=token_failed`);
     }
   }
@@ -69,6 +97,10 @@ router.get('/google/callback',
 // Refresh token
 router.post('/refresh-token', isAuthenticated, async (req, res) => {
   try {
+    if (!req.user) {
+      throw new AuthError('User not found', 'USER_NOT_FOUND', 404);
+    }
+
     const token = jwt.sign(
       { 
         id: req.user.id,
@@ -78,22 +110,34 @@ router.post('/refresh-token', isAuthenticated, async (req, res) => {
       process.env.JWT_SECRET, 
       { expiresIn: '15m' }
     );
+
     res.json({ token });
   } catch (error) {
-    console.error('Token refresh error:', error);
-    res.status(500).json({ error: 'Failed to refresh token' });
+    handleError(error, req, res);
   }
 });
 
 // Logout route
 router.get('/logout', (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.error('Logout error:', err);
-      return res.status(500).json({ error: 'Failed to logout' });
-    }
-    res.json({ message: 'Logged out successfully' });
-  });
+  try {
+    const userId = req.user?.id;
+    
+    req.logout((err) => {
+      if (err) {
+        throw new AuthError('Logout failed', 'LOGOUT_FAILED', 500);
+      }
+      
+      // Log successful logout
+      console.log('Successful logout:', {
+        userId,
+        timestamp: new Date().toISOString()
+      });
+
+      res.json({ message: 'Logged out successfully' });
+    });
+  } catch (error) {
+    handleError(error, req, res);
+  }
 });
 
 module.exports = router;

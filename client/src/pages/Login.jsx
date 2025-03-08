@@ -24,10 +24,10 @@ const Login = () => {
 
   const handleGoogleLogin = () => {
     setLoading(true);
-    // Use the correct API path that matches the server route
-    window.location.href = process.env.NODE_ENV === 'production'
-      ? `${import.meta.env.VITE_API_URL}/api/auth/google`
-      : 'http://localhost:5000/api/auth/google';
+    const baseUrl = process.env.NODE_ENV === 'production'
+      ? import.meta.env.VITE_API_URL
+      : 'http://localhost:5000';
+    window.location.href = `${baseUrl}/api/auth/google`;
   };
 
   return (
