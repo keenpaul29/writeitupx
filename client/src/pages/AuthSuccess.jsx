@@ -13,36 +13,56 @@ const AuthSuccess = () => {
   useEffect(() => {
     const handleAuth = async () => {
       try {
+        console.log('AuthSuccess: Starting authentication process');
         const queryParams = new URLSearchParams(location.search);
         const token = queryParams.get('token');
         
         if (!token) {
-          console.log('No token found in URL');
+          console.error('AuthSuccess: No token found in URL parameters');
           setStatus('error');
           setMessage('No authentication token found');
           return;
         }
 
-        console.log('Found token, attempting login...');
+        console.log('AuthSuccess: Found token, verifying...');
+        // Verify token format
+        if (token.split('.').length !== 3) {
+          console.error('AuthSuccess: Invalid token format');
+          setStatus('error');
+          setMessage('Invalid token format');
+          return;
+        }
+
+        console.log('AuthSuccess: Attempting login with token');
         const success = await login(token);
         
         if (success) {
-          console.log('Login successful, preparing to redirect...');
+          console.log('AuthSuccess: Login successful');
           setStatus('success');
           setMessage('Successfully signed in! Redirecting to dashboard...');
           
+          // Verify token was stored
+          const storedToken = localStorage.getItem('token');
+          if (!storedToken) {
+            console.error('AuthSuccess: Token not stored after successful login');
+            setStatus('error');
+            setMessage('Failed to store authentication token');
+            return;
+          }
+
+          console.log('AuthSuccess: Token stored successfully, preparing redirect');
           // Add a small delay before redirecting to show the success message
           setTimeout(() => {
-            console.log('Redirecting to dashboard...');
+            console.log('AuthSuccess: Redirecting to dashboard');
             navigate('/dashboard', { replace: true });
           }, 1500);
         } else {
-          console.log('Login failed');
+          console.error('AuthSuccess: Login failed');
           setStatus('error');
           setMessage('Failed to authenticate. Please try again.');
         }
       } catch (err) {
-        console.error('Auth success error:', err);
+        console.error('AuthSuccess: Error during authentication:', err);
         setStatus('error');
         setMessage('An error occurred during authentication');
       }
@@ -54,7 +74,7 @@ const AuthSuccess = () => {
   // Redirect to dashboard if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
-      console.log('Already authenticated, redirecting to dashboard...');
+      console.log('AuthSuccess: Already authenticated, redirecting to dashboard');
       navigate('/dashboard', { replace: true });
     }
   }, [isAuthenticated, navigate]);
@@ -93,7 +113,10 @@ const AuthSuccess = () => {
             sx={{ width: '100%' }}
             action={
               <button
-                onClick={() => navigate('/login')}
+                onClick={() => {
+                  console.log('AuthSuccess: Returning to login page');
+                  navigate('/login');
+                }}
                 style={{
                   background: 'none',
                   border: 'none',
