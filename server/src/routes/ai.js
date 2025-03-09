@@ -17,7 +17,7 @@ let model;
 async function initializeAI() {
   try {
     genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    model = genAI.getGenerativeModel({ model: 'gemini-1.5-pro' });
     
     // Test the model
     console.log('Testing Gemini AI connection...');

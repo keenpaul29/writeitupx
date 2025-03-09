@@ -8,6 +8,7 @@ import {
   Typography,
   Divider,
   Alert,
+  Stack,
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { useAuth } from '../hooks/useAuth';
@@ -22,9 +23,20 @@ const Login = () => {
   const queryParams = new URLSearchParams(location.search);
   const authError = queryParams.get('error');
 
-  const handleGoogleLogin = () => {
+  const getErrorMessage = (error) => {
+    switch (error) {
+      case 'auth_failed':
+        return 'Authentication failed. Please try again.';
+      case 'user_exists':
+        return 'An account with this email already exists. Please sign in instead.';
+      default:
+        return error;
+    }
+  };
+
+  const handleGoogleAuth = (type) => {
     const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    window.location.href = `${baseUrl}/api/auth/google`;
+    window.location.href = `${baseUrl}/api/auth/google/${type}`;
   };
 
   return (
@@ -104,28 +116,26 @@ const Login = () => {
               textShadow: '0 2px 4px rgba(0,0,0,0.1)',
             }}
           >
-            Sign In to WriteitupX
+            Welcome to WriteitupX
           </Typography>
 
           {(error || authError) && (
             <Alert severity="error" sx={{ mb: 3 }}>
-              {authError === 'auth_failed'
-                ? 'Authentication failed. Please try again.'
-                : error}
+              {getErrorMessage(authError || error)}
             </Alert>
           )}
 
           <Typography variant="body1" align="center" sx={{ mb: 3 }}>
-            Sign in to access your letters and save them to Google Drive.
+            Create and manage your letters with Google Drive integration.
           </Typography>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+          <Stack spacing={2} sx={{ mb: 3 }}>
             <Button
               variant="contained"
               color="primary"
               size="large"
               startIcon={<GoogleIcon />}
-              onClick={handleGoogleLogin}
+              onClick={() => handleGoogleAuth('signup')}
               disabled={loading}
               fullWidth
               sx={{ 
@@ -140,9 +150,29 @@ const Login = () => {
                 boxShadow: (theme) => `0 4px 12px ${theme.palette.primary.main}33`,
               }}
             >
+              {loading ? 'Creating account...' : 'Sign up with Google'}
+            </Button>
+
+            <Button
+              variant="outlined"
+              color="primary"
+              size="large"
+              startIcon={<GoogleIcon />}
+              onClick={() => handleGoogleAuth('login')}
+              disabled={loading}
+              fullWidth
+              sx={{ 
+                py: 1.5,
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: (theme) => `0 6px 16px ${theme.palette.primary.main}20`,
+                },
+                transition: 'all 0.3s ease-in-out',
+              }}
+            >
               {loading ? 'Signing in...' : 'Sign in with Google'}
             </Button>
-          </Box>
+          </Stack>
 
           <Divider sx={{ my: 3 }} />
 
@@ -155,7 +185,7 @@ const Login = () => {
               fontSize: '0.85rem',
             }}
           >
-            By signing in, you agree to our Terms of Service and Privacy Policy.
+            By continuing, you agree to our Terms of Service and Privacy Policy.
           </Typography>
         </Paper>
       </Container>

@@ -7,24 +7,44 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 axios.defaults.baseURL = API_URL;
 axios.defaults.withCredentials = true;
 
-console.log('API URL:', API_URL); // Debug log
+// Debug logs for configuration
+if (process.env.NODE_ENV === 'production') {
+  console.log('Production environment detected');
+  console.log('API URL configured as:', API_URL);
+}
 
 // Helper function to set auth header
 const setAuthToken = (token) => {
   try {
     if (token) {
+      console.log('Setting auth token:', token.substring(0, 10) + '...');
+      
       // Store token in localStorage first
       localStorage.setItem('token', token);
+      console.log('Token stored in localStorage');
+      
       // Then set axios header
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      console.log('Token stored in localStorage:', localStorage.getItem('token')); // Verify storage
-      console.log('Token set in headers:', axios.defaults.headers.common['Authorization']); // Verify header
+      console.log('Token set in Authorization header');
+      
+      // Verify storage
+      const storedToken = localStorage.getItem('token');
+      const headerToken = axios.defaults.headers.common['Authorization'];
+      
+      if (!storedToken || !headerToken) {
+        console.error('Token storage verification failed:', {
+          localStorage: !!storedToken,
+          header: !!headerToken
+        });
+        return false;
+      }
+      
       return true;
     } else {
+      console.log('Clearing auth token');
       localStorage.removeItem('token');
       delete axios.defaults.headers.common['Authorization'];
-      console.log('Token removed from localStorage and headers');
-      return false;
+      return true;
     }
   } catch (error) {
     console.error('Error setting auth token:', error);
@@ -39,6 +59,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [initialized, setInitialized] = useState(false);
 
   const checkAuthStatus = async (token) => {
     try {
@@ -63,55 +84,22 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
 
-      // Verify token is in localStorage
-      const storedToken = localStorage.getItem('token');
-      console.log('Stored token matches:', storedToken === token);
-
       // Get user data
-      console.log('Making auth status request...');
       const response = await axios.get('/api/auth/check-status');
-      console.log('Auth status response:', response.data);
 
       if (response.data.authenticated) {
         setCurrentUser(response.data.user);
         setIsAuthenticated(true);
         setError(null);
-        console.log('Authentication successful:', response.data.user);
         return true;
       }
 
-      console.log('Server returned not authenticated');
       return false;
     } catch (error) {
       console.error('Auth check error:', error);
       return false;
     }
   };
-
-  useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        console.log('Initializing auth...');
-        const token = localStorage.getItem('token');
-        console.log('Found token in localStorage:', token ? 'yes' : 'no');
-        
-        const isValid = await checkAuthStatus(token);
-        console.log('Token validation result:', isValid);
-        
-        if (!isValid) {
-          console.log('Invalid token, logging out');
-          logout();
-        }
-      } catch (error) {
-        console.error('Auth initialization error:', error);
-        logout();
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initializeAuth();
-  }, []);
 
   const login = async (token) => {
     try {
@@ -120,11 +108,19 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
 
-      console.log('Starting login process with token');
+      console.log('Starting login process with token:', token.substring(0, 10) + '...');
+      
+      // First set the token
+      const tokenSet = setAuthToken(token);
+      if (!tokenSet) {
+        throw new Error('Failed to store authentication token');
+      }
+
+      // Then check auth status
       const isValid = await checkAuthStatus(token);
 
       if (isValid) {
-        console.log('Login successful, token stored and validated');
+        console.log('Login successful');
         return true;
       } else {
         console.log('Login failed - invalid auth status');
@@ -142,6 +138,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     try {
+      console.log('Starting logout process');
       setAuthToken(null);
       setCurrentUser(null);
       setIsAuthenticated(false);
@@ -152,24 +149,42 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const refreshToken = async () => {
-    try {
-      console.log('Attempting to refresh token...');
-      const response = await axios.post('/api/auth/refresh-token');
-      const { token } = response.data;
-      
-      if (!token) {
-        console.log('No token received from refresh request');
-        return false;
+  useEffect(() => {
+    const initializeAuth = async () => {
+      // Prevent multiple initializations
+      if (initialized) {
+        return;
       }
+      
+      try {
+        console.log('Initializing auth...');
+        const token = localStorage.getItem('token');
+        
+        if (token) {
+          console.log('Found token in localStorage, validating...');
+          const isValid = await checkAuthStatus(token);
+          
+          if (!isValid) {
+            console.log('Token validation failed, logging out');
+            logout();
+          } else {
+            console.log('Token validation successful');
+          }
+        } else {
+          console.log('No token found in localStorage');
+          logout();
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        logout();
+      } finally {
+        setLoading(false);
+        setInitialized(true);
+      }
+    };
 
-      return await checkAuthStatus(token);
-    } catch (error) {
-      console.error('Token refresh error:', error);
-      logout();
-      return false;
-    }
-  };
+    initializeAuth();
+  }, []);
 
   return (
     <AuthContext.Provider
@@ -180,7 +195,7 @@ export const AuthProvider = ({ children }) => {
         error,
         login,
         logout,
-        refreshToken
+        checkAuthStatus
       }}
     >
       {children}

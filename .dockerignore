@@ -1,20 +1,36 @@
-.git
-.gitignore
+# Dependencies
 node_modules
-*/node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Environment files
 .env
 .env.*
-*.md
-.DS_Store
-npm-debug.log
-docker-compose*
-Dockerfile*
-.dockerignore
+
+# Git files
+.git
+.gitignore
+
+# IDE files
+.idea
 .vscode
-coverage
+*.swp
+*.swo
+
+# Build files
 dist
 build
-.cursorrules
+.next
+.vercel
+
+# Logs
+logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
 
 # Keep package files
 !package.json

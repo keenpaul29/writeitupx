@@ -13,6 +13,7 @@ import LetterEditor from './pages/LetterEditor';
 import AuthSuccess from './pages/AuthSuccess';
 import NotFound from './pages/NotFound';
 import Layout from './components/Layout';
+import Onboarding from './pages/Onboarding';
 
 const theme = createTheme({
   palette: {
@@ -50,10 +51,14 @@ const ProtectedRoute = ({ children }) => {
     return <LoadingScreen />;
   }
   
-  return isAuthenticated ? children : <Navigate to="/login" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  
+  return children;
 };
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -87,12 +92,20 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route 
+              path="onboarding" 
+              element={
+                <ProtectedRoute>
+                  <Onboarding />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
       </Suspense>
     </ThemeProvider>
   );
-}
+};
 
 export default App; 

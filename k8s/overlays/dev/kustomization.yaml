@@ -1,0 +1,37 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: writeitupx
+
+resources:
+  - ../../base
+
+configMapGenerator:
+  - name: app-config
+    literals:
+      - node_env=development
+      - api_url=http://api.writeitupx.local
+      - client_url=http://writeitupx.local
+
+secretGenerator:
+  - name: app-secrets
+    envs:
+      - .env.dev
+
+patches:
+  - target:
+      kind: Ingress
+      name: writeitupx-ingress
+    patch: |-
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: writeitupx.local
+      - op: replace
+        path: /spec/tls/0/hosts/1
+        value: api.writeitupx.local
+      - op: replace
+        path: /spec/rules/0/host
+        value: writeitupx.local
+      - op: replace
+        path: /spec/rules/1/host
+        value: api.writeitupx.local 
