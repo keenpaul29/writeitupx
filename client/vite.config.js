@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
       alias: {
         '@': path.resolve(__dirname, './src'),
       },
+      extensions: ['.mjs', '.js', '.jsx', '.json', '.ts', '.tsx']
     },
     define: {
       'process.env': {},
@@ -26,11 +27,13 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
+      historyApiFallback: true,
     },
     build: {
       outDir: 'dist',
       sourcemap: true,
       chunkSizeWarningLimit: 10000,
+      manifest: true,
       rollupOptions: {
         output: {
           manualChunks: {

@@ -1,6 +1,6 @@
 {
-    "short_name": "WriteitupX",
-    "name": "WriteitupX with Google Drive Integration",
+    "short_name": "WriteItUpX",
+    "name": "WriteItUpX - AI-Powered Letter Writing",
     "icons": [
       {
         "src": "favicon.ico",
@@ -20,6 +20,6 @@
     ],
     "start_url": ".",
     "display": "standalone",
-    "theme_color": "#000000",
+    "theme_color": "#1976d2",
     "background_color": "#ffffff"
   } 
