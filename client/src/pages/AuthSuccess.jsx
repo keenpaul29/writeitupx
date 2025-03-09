@@ -4,7 +4,7 @@ import { Box, CircularProgress, Typography, Container, Alert } from '@mui/materi
 import { useAuth } from '../hooks/useAuth';
 
 const AuthSuccess = () => {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [status, setStatus] = useState('loading'); // 'loading' | 'success' | 'error'
@@ -17,22 +17,27 @@ const AuthSuccess = () => {
         const token = queryParams.get('token');
         
         if (!token) {
+          console.log('No token found in URL');
           setStatus('error');
           setMessage('No authentication token found');
           return;
         }
 
-        console.log('Attempting to login with token...');
+        console.log('Found token, attempting login...');
         const success = await login(token);
         
         if (success) {
+          console.log('Login successful, preparing to redirect...');
           setStatus('success');
           setMessage('Successfully signed in! Redirecting to dashboard...');
+          
           // Add a small delay before redirecting to show the success message
           setTimeout(() => {
-            navigate('/dashboard');
+            console.log('Redirecting to dashboard...');
+            navigate('/dashboard', { replace: true });
           }, 1500);
         } else {
+          console.log('Login failed');
           setStatus('error');
           setMessage('Failed to authenticate. Please try again.');
         }
@@ -46,6 +51,14 @@ const AuthSuccess = () => {
     handleAuth();
   }, [login, navigate, location]);
 
+  // Redirect to dashboard if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('Already authenticated, redirecting to dashboard...');
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
     <Container maxWidth="sm">
       <Box
@@ -56,6 +69,7 @@ const AuthSuccess = () => {
           justifyContent: 'center',
           minHeight: '50vh',
           gap: 2,
+          py: 4,
         }}
       >
         {status === 'loading' && (
@@ -74,7 +88,24 @@ const AuthSuccess = () => {
         )}
 
         {status === 'error' && (
-          <Alert severity="error" sx={{ width: '100%' }}>
+          <Alert 
+            severity="error" 
+            sx={{ width: '100%' }}
+            action={
+              <button
+                onClick={() => navigate('/login')}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  color: 'inherit'
+                }}
+              >
+                Return to Login
+              </button>
+            }
+          >
             {message}
           </Alert>
         )}
