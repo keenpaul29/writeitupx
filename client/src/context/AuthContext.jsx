@@ -10,8 +10,10 @@ axios.defaults.withCredentials = true;
 const setAuthToken = (token) => {
   if (token) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    localStorage.setItem('token', token);
   } else {
     delete axios.defaults.headers.common['Authorization'];
+    localStorage.removeItem('token');
   }
 };
 
@@ -54,6 +56,7 @@ export const AuthProvider = ({ children }) => {
         if (response.data.authenticated) {
           setCurrentUser(response.data.user);
           setIsAuthenticated(true);
+          console.log('User authenticated:', response.data.user);
         } else {
           logout();
         }
@@ -70,9 +73,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (token) => {
     try {
-      localStorage.setItem('token', token);
-      
-      // Set auth header
+      // Store token in localStorage
       setAuthToken(token);
       
       // Get user data
@@ -82,6 +83,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(response.data.user);
         setIsAuthenticated(true);
         setError(null);
+        console.log('Login successful:', response.data.user);
         return true;
       } else {
         logout();
@@ -97,10 +99,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
     setAuthToken(null);
     setCurrentUser(null);
     setIsAuthenticated(false);
+    console.log('Logged out successfully');
   };
 
   const refreshToken = async () => {
@@ -108,9 +110,7 @@ export const AuthProvider = ({ children }) => {
       const response = await axios.post('/api/auth/refresh-token');
       const { token } = response.data;
       
-      localStorage.setItem('token', token);
       setAuthToken(token);
-      
       return true;
     } catch (error) {
       console.error('Token refresh error:', error);
